@@ -102,8 +102,55 @@ def problem_3():
     df_agg = df_agg.sort_values(['Year', 'Month'], ascending=[True, True])
     return df_agg
 
+def problem_4():
+    '''
+    Identify customers from Customer Loyalty History.csv with CLV above median value. 
+    For these high-value customers, categorize by City and calculate percentage distribution of Education levels within each city.
+
+    Only include cities with at least 5 customers. Round percentages to one decimal place.
+
+    Display final result with columns:
+    - City
+    - Bachelor (%)
+    - College (%)
+    - High School (%)
+    - Doctor (%)
+    - Total_Customers
+
+    Sort by Total_Customers descending.
+
+    Data Path:
+    Customer Loyalty History.csv
+    '''
+    df = load_data('customer-loyalty.csv')
+    clv_median = df['CLV'].median()
+    df = df[df['CLV'] > clv_median]
+    df_agg = (
+        df.groupby(['City', 'Education'], as_index=False)
+            .agg(Total_Customers=('Loyalty Number', 'count'))
+    )
+    df_pivot = (
+        df_agg.pivot(index='City',
+                     columns='Education',
+                     values='Total_Customers')
+            .rename_axis(None, axis=1)
+            .reset_index()
+    )
+    edu_cols = ['Bachelor', 'College', 'Doctor', 'High School or Below', 'Master']
+    df_pivot[edu_cols] = df_pivot[edu_cols].fillna(0)
+    df_pivot['Total_Customers'] = df_pivot[edu_cols].sum(axis=1)
+    df_pivot[edu_cols] = (
+        df_pivot[edu_cols]
+            .div(df_pivot['Total_Customers'], axis=0)
+            .mul(100)
+            .round(1)
+    )
+    df_pivot = df_pivot.sort_values(by='Total_Customers', ascending=False)
+    return df_pivot
+
 solutions_dict = {
     1: (problem_1.__doc__, problem_1),
     2: (problem_2.__doc__, problem_2),
     3: (problem_3.__doc__, problem_3),
+    4: (problem_4.__doc__, problem_4),
 }
