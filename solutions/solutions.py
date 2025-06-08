@@ -148,9 +148,47 @@ def problem_4():
     df_pivot = df_pivot.sort_values(by='Total_Customers', ascending=False)
     return df_pivot
 
+def problem_5():
+    '''
+    Merge Customer Flight Activity 2017.csv with Customer Loyalty History.csv on Loyalty Number. 
+    Filter rows where Year=2017 and Total Flights>0.
+
+    Group by Province and compute:
+    - Customers: count of unique Loyalty Number
+    - Avg_Total_Flights: mean of Total Flights
+    - Avg_Distance: mean of Distance
+
+    Round averages to two decimals. Sort by Avg_Distance descending and display top 5 provinces with columns:
+    Province, Customers, Avg_Total_Flights, Avg_Distance
+
+    Data Paths:
+    Customer Flight Activity 2017.csv
+    Customer Loyalty History.csv
+    '''
+    df1 = load_data('customer-flight-activity.csv')
+    df2 = load_data('customer-loyalty.csv')
+    df = pd.merge(df1, df2, on='Loyalty Number', how='left')
+    df = df[(df['Year'] == 2017) & (df['Total Flights'] > 0)]
+    df = df.sample(n=10, random_state=42)
+    print(df[['Loyalty Number', 'Province', 'Total Flights', 'Distance']])
+    df_agg = (
+        df.groupby('Province', as_index=False)
+            .agg(
+                Customers=('Loyalty Number', 'nunique'),
+                Avg_Total_Flights=('Total Flights', 'mean'),
+                Avg_Distance=('Distance', 'mean')
+            )
+            .round(2)
+            .sort_values('Avg_Distance', ascending=False)
+            .reset_index(drop=True)
+            .head(5)
+    )
+    return df_agg
+
 solutions_dict = {
     1: (problem_1.__doc__, problem_1),
     2: (problem_2.__doc__, problem_2),
     3: (problem_3.__doc__, problem_3),
     4: (problem_4.__doc__, problem_4),
+    5: (problem_5.__doc__, problem_5),
 }
