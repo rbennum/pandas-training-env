@@ -150,7 +150,7 @@ def problem_4():
 
 def problem_5():
     '''
-    Merge Customer Flight Activity 2017.csv with Customer Loyalty History.csv on Loyalty Number. 
+    Merge Customer Flight Activity 2017.csv with Customer Loyalty History.csv on Loyalty Number.
     Filter rows where Year=2017 and Total Flights>0.
 
     Group by Province and compute:

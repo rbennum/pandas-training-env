@@ -1,0 +1,158 @@
+# Specification
+
+Generate exercise problems for learning SQL with these specifications:
+
+- You will generate it after I say `/create', one problem at a time.
+- Tailor your response to be as simple and dense as possible.
+- Do not contain your helper words.
+- The problem would be made in English, base the problems on the problem templates and the ERD detail below.
+- The problem templates below are just templates; you can expand the problem to cover a wider SQL topics.
+
+## Problem Templates
+
+Problem example #1:
+
+```text
+Tampilkan informasi karyawan beserta jabatan yang pernah dipegang berdasarkan penggabungan tabel (LEFT JOIN) employee dan title melalui kolom emp_no dan emp_no.
+
+Kolom yang ditampilkan:
+
+emp_no inisial employee_id
+first_name
+last_name
+gender
+title
+from_date
+to_date
+```
+
+Problem example #2:
+
+```text
+Tampilkan informasi karyawan baru (atau hire date > 1997-12-31) yang memiliki gaji tertinggi berdasarkan penggabungan tabel (INNER JOIN) employee dan salary melalui kolom emp_no dan emp_no.
+
+Kolom yang ditampilkan:
+emp_no
+first_name
+last_name
+gender
+hire_date
+amount inisial salary
+
+Urutkan berdasarkan salary dan hire_date secara menurun.
+```
+
+Problem example #3:
+
+```text
+Tampilkan top 100 karyawan aktif senior (telah lama di perusahaan). Lama diperusahaan dapat dikonfirmasi dari hire_date dan harus masih aktif (to_date = "9999-01-01" pada tabel title).
+
+Kolom yang ditampilkan:
+
+emp_no
+first_name
+last_name
+gender
+hire_date
+title
+from_date
+to_date
+
+Urutkan hasil berdasarkan hire_date dan emp_no secara menaik.
+```
+
+Problem example #4:
+
+```text
+Tampilkan perbandingan rata-rata gaji terbaru antara karyawan laki-laki dan perempuan.
+
+Kolom yang ditampilkan:
+
+gender
+avg_salary (bulatkan dua angka belakang koma)
+```
+
+Problem example #5:
+
+```text
+Hitung rata-rata durasi (dalam hari) setiap karyawan memegang jabatan tertentu berdasarkan tabel title. Pastikan untuk mengabaikan to_date = "9999-01-01".
+
+Kolom yang ditampilkan:
+
+title
+min_duration_days
+max_duration_days
+avg_duration_days (bulatkan dua angka belakang koma)
+
+Urutkan hasil berdasarkan avg_duration_days secara menurun.
+```
+
+Problem example #6:
+
+```text
+Tampilkan statistik dari gaji karyawan yang aktif dengan gaji dan jabatan terkini (to_date = "9999-01-01").
+
+Kolom yang ditampilkan:
+
+title
+min_salary
+max_salary
+avg_salary (bulatkan dua angka belakang koma)
+
+Urutkan berdasarkan avg_salary secara menurun dan title menaik.
+```
+
+Problem example #7:
+
+```text
+Tampilkan ringkasan data terkini (to_date = '9999-01-01') yang mencakup informasi berikut:
+
+Kolom yang ditampilkan:
+
+total_employee
+total_manager
+total_department
+avg_salary (bulatkan dua angka belakang koma)
+
+Urutkan atau tampilkan hasil berdasarkan agregasi data yang memiliki to_date = '9999-01-01'.
+```
+
+## ERD Detail
+
+```text
+[employee]
+- emp_no (PK)
+- birth_date
+- first_name
+- last_name
+- gender
+- hire_date
+
+[title]
+- emp_no (FK): employee.emp_no
+- title
+- from_date
+- to_date
+
+[salary]
+- emp_no (FK): employee.emp_no
+- from_date
+- to_date
+- amount
+
+[dept_emp]
+- emp_no (FK): employee.emp_no
+- dept_no (FK): department.dept_no
+- from_date
+- to_date
+
+[department]
+- dept_no (PK)
+- dept_name
+
+[dept_manager]
+- emp_no (FK): employee.emp_no
+- dept_no (FK): department.dept_no
+- from_date
+- to_date
+```
